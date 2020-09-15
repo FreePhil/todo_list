@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_new_task.*
 import kotlinx.coroutines.NonCancellable.cancel
@@ -16,7 +17,7 @@ class NewTaskDialogFragment: DialogFragment() {
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 
-    var newTaskDialogListener: NewTaskDialogListener? = null
+    private var newTaskDialogListener: NewTaskDialogListener? = null
 
     companion object {
         fun newInstance(title: String): NewTaskDialogFragment {
@@ -34,9 +35,11 @@ class NewTaskDialogFragment: DialogFragment() {
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(title)
 
-        builder.setView(dialogView)
+        val newTaskDialog = activity?.layoutInflater?.inflate(R.layout.dialog_new_task, null)
+        val task = newTaskDialog?.findViewById<EditText>(R.id.task)
+        builder.setView(newTaskDialog)
             .setPositiveButton(R.string.save) {dialog, id ->
-                newTaskDialogListener?.onDialogPositiveClick(this, task.text.toString())
+                newTaskDialogListener?.onDialogPositiveClick(this, task?.text.toString())
             }
             .setNegativeButton(R.string.cancel) {dialog, id ->
 
